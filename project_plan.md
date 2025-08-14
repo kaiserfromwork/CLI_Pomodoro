@@ -34,7 +34,7 @@ To create a Pomodoro Application that runs on CLI.
 - **Libraries/Tools:**
     - argparse (for command-line arguments)
     - time, sys (built-in for timing and output control)
-    - `CHECK NOTIFICAITON TOOL`  (for notifications)
+    - swaync (for notifications)
     - rich (for customising terminal output)
 
 **Interface Design (User Experience):**
