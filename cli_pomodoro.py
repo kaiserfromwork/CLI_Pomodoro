@@ -2,22 +2,24 @@ import sys
 import time
 import subprocess
 
+from quotes import get_quote
 
-def notify_user(message: str = "This is a notification.\n"):
+
+def notify_user(message: str = "This is a notification.\n") -> None:
     try:
-        print("Notifying user.")
         subprocess.run(["notify-send", message], check=True, text=True)
     except Exception as error:
         print("an error occurred while trying to notify the user")
         print(f"error: {error}")
 
 
-def count_down_timer(interval_time: int):
+def count_down_timer(interval_time: int) -> None:
     for minutes in range(1, interval_time):
         time_left = f"{((interval_time - minutes) // 60)}:{((60 - minutes) % 60):02d}"
-        sys.stdout.write(f"\rTime left: {time_left}\n")
+        sys.stdout.write(f"\rTime left: {time_left}")
         sys.stdout.flush()
         time.sleep(1)
+    print("\rTime left: 0:00")
 
 
 def check_digits(focused_interval: str, break_interval: str) -> bool:
@@ -31,12 +33,12 @@ def check_digits(focused_interval: str, break_interval: str) -> bool:
     return is_valid
 
 
-def cli_pomodoro():
+def get_interval_times() -> tuple | None:
     focused_interval = input(
-        "How long would you like to work for each time? (in minutes)"
+        "How long would you like to work for each time? (in minutes)\n"
     )
     break_interval = input(
-        "How long would you like to break between sessions? After 2 focus session you will have a longer break."
+        "How long would you like to break between sessions? After 3 focus session you will have a longer break.\n"
     )
 
     if not focused_interval.isdigit():
@@ -44,23 +46,51 @@ def cli_pomodoro():
     if not break_interval.isdigit():
         print("Please, enter only numbers for  your break time.")
 
+    return focused_interval, break_interval
+
+
+def cli_pomodoro() -> None:
     seconds = 60
-    focused_time = int(focused_interval) * seconds
-    short_break = int(break_interval) * seconds
     counter = 0
 
+    response = get_interval_times()
+    if not response:
+        print("Unable to get input from user!")
+        return
+
+    focused_interval, break_interval = response
+    focused_time = int(focused_interval) * seconds
+    short_break = int(break_interval) * seconds
+
     while True:
-        if counter == 2:
-            short_break = +short_break
-            counter = 0
-        else:
-            short_break = short_break
+        print(f"Counter -> {counter}")
+        print("\nFOCUSED TIME!")
         count_down_timer(focused_time)
-        print("\nYour Focused time is UP!.\nYou can take a short break now!\n")
-        notify_user()
+        print("\nYour Focused time is UP!\nYou can take a short break now!\n")
+
+        response = get_quote()
+        if response:
+            quote, author = response
+            message = f"BREAK TIME\n\n{quote} - {author}"
+            notify_user(message)
+        else:
+            notify_user()
+
         print("BREAK TIME!")
         count_down_timer(short_break)
-        counter = +1
+        notify_user("Break time is over. Time to focus again!\n")
+        counter += 1
+        print("")
+
+        if counter == 2:
+            short_break += short_break
+            print("Next break will be longer.")
+        if counter > 2:
+            is_done = input("Would you like to use Pomodoro some more?")
+            if is_done not in ("yes", "y"):
+                return
+            else:
+                counter = 0
 
 
 if __name__ == "__main__":
