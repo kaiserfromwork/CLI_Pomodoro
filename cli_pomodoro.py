@@ -38,7 +38,7 @@ def get_interval_times() -> tuple | None:
         "How long would you like to work for each time? (in minutes)\n"
     )
     break_interval = input(
-        "How long would you like to break between sessions? After 3 focus session you will have a longer break.\n"
+        "How long would you like to break between sessions? After 3 focus session, next break will be longer.\n"
     )
 
     if not focused_interval.isdigit():
@@ -63,30 +63,31 @@ def cli_pomodoro() -> None:
     short_break = int(break_interval) * seconds
 
     while True:
-        print(f"Counter -> {counter}")
         print("\nFOCUSED TIME!")
+        notify_user("Time to Focus!")
         count_down_timer(focused_time)
         print("\nYour Focused time is UP!\nYou can take a break now!\n")
 
-        response = get_quote()
+        # response = get_quote()
+        response = None
         if response:
             quote, author = response
             message = f"BREAK TIME\n\n{quote} - {author}"
             notify_user(message)
         else:
-            notify_user()
+            notify_user("You should take a break now.")
 
         print("BREAK TIME!")
         count_down_timer(short_break)
-        notify_user("Break time is over. Time to focus again!\n")
+        notify_user("Break time is over!\n")
         counter += 1
         print("")
 
         if counter == 2:
             short_break += short_break
-            print("Next break will be longer.")
+            print("Your next break will be longer.")
         if counter > 2:
-            is_done = input("Would you like to use Pomodoro some more?")
+            is_done = input("Would you like to use Pomodoro some more?\n")
             if is_done not in ("yes", "y"):
                 return
             else:
