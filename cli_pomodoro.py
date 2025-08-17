@@ -66,7 +66,7 @@ def cli_pomodoro() -> None:
         print(f"Counter -> {counter}")
         print("\nFOCUSED TIME!")
         count_down_timer(focused_time)
-        print("\nYour Focused time is UP!\nYou can take a short break now!\n")
+        print("\nYour Focused time is UP!\nYou can take a break now!\n")
 
         response = get_quote()
         if response:
