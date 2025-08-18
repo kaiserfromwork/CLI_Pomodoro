@@ -8,6 +8,9 @@ from quotes import get_quote
 
 
 def notify_user(message: str = "This is a notification.\n") -> None:
+    """
+    Displays a desktop notification to the user. In case a message is not specified on  function call, it will display a default message.
+    """
     try:
         subprocess.run(["notify-send", message], check=True, text=True)
     except Exception as error:
@@ -16,6 +19,9 @@ def notify_user(message: str = "This is a notification.\n") -> None:
 
 
 def count_down_timer(interval_time: int) -> None:
+    """
+    Command-line countdown timer updated every second until it reaches zero.
+    """
     for minutes in range(1, interval_time):
         time_left = f"{((interval_time - minutes) // 60)}:{((60 - minutes) % 60):02d}"
         sys.stdout.write(f"\rTime left: {time_left}")
@@ -25,6 +31,9 @@ def count_down_timer(interval_time: int) -> None:
 
 
 def check_digits(focused_interval: str, break_interval: str) -> bool:
+    """
+    Check if input is a valid integer
+    """
     errors_list = []
     if not focused_interval.isdigit():
         errors_list.append("Please, enter only numbers for your focused time.\n")
@@ -36,6 +45,9 @@ def check_digits(focused_interval: str, break_interval: str) -> bool:
 
 
 def get_interval_times() -> tuple | None:
+    """
+    Take input from user to defined length of focused and break interval.
+    """
     focused_interval = input(
         "How long would you like to work for each time? (in minutes)\n"
     )
@@ -52,6 +64,9 @@ def get_interval_times() -> tuple | None:
 
 
 def cli_pomodoro() -> None:
+    """
+    Command-line pomodoro application.
+    """
     seconds = 60
     counter = 0
 
@@ -71,6 +86,7 @@ def cli_pomodoro() -> None:
         print("\nYour Focused time is UP!\nYou can take a break now!\n")
 
         # response = get_quote()
+        # TODO: CHANGE API, this current API doesn't provide the kind of quotes that fits the need of this application.
         response = None
         if response:
             quote, author = response

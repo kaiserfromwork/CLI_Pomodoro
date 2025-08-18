@@ -3,6 +3,9 @@ import requests
 
 
 def get_quote() -> tuple | None:
+    """
+    Return a quote from a database.
+    """
     try:
         response = requests.get("https://zenquotes.io/api/random")
         data = response.json()
