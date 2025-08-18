@@ -1,3 +1,5 @@
+#!/home/kaiser/projects/CLI_Pomodoro/venv/bin/python
+
 import sys
 import time
 import subprocess
